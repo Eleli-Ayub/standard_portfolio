@@ -142,17 +142,16 @@ export default function Home() {
 
     <section className="hero section-wrap" id="home">
       <div className="hero-copy">
-        <span className="intro-label">Hi, I&apos;m</span>
         <h1>Ayub <em>Eleli</em></h1>
         <p className="hero-role">Senior Software Engineer &amp; Full-Stack Developer</p>
-        <p className="hero-description">I build digital products that solve real problems and create meaningful impact. From idea to deployment, I turn complex challenges into simple, beautiful solutions.</p>
+        <p className="hero-description">I build <strong>backend systems, cloud infrastructure and full-stack products</strong>: fintech platforms for lending and payments, multivendor marketplaces, Android apps and developer tools. I work mainly in <strong>Go and TypeScript</strong> with Node.js, React and Next.js, store data in PostgreSQL and MongoDB, and ship to AWS, GCP and DigitalOcean with Docker, Terraform, Ansible and CI/CD pipelines.</p>
         <div className="hero-actions">
           <a className="button primary" href="#work">View My Work <Icon name="arrow" size={17} /></a>
           <a className="button secondary" href={CV} target="_blank" rel="noreferrer">View CV <Icon name="eye" size={17} /></a>
           <a className="button secondary" href={CV} download="Ayub-Eleli-CV.pdf">Download CV <Icon name="download" size={17} /></a>
         </div>
       </div>
-      <HeroPhoto />
+      <div className="hero-visual"><SocialLinks /><HeroPhoto /></div>
     </section>
 
     <section className="about section-wrap" id="about">
