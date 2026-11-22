@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { techIcons } from "./tech-icons";
 
 type IconName = "arrow" | "code" | "users" | "bulb" | "target" | "book" | "github" | "mail" | "phone" | "pin" | "download" | "external" | "briefcase" | "design" | "rocket" | "chart" | "search" | "layers" | "eye" | "linkedin" | "facebook" | "x" | "server" | "cloud" | "database" | "check" | "grad";
 
@@ -95,6 +96,23 @@ const stats = [["20k+", "customers served on Ziya"], ["KES 170M+", "in circulati
 const strengths: [IconName, string][] = [["bulb", "Problem solving"], ["server", "Backend architecture"], ["cloud", "Infrastructure as code"], ["users", "Mentoring engineers"], ["target", "Shipping on deadline"], ["book", "Clear documentation"]];
 const process = [["01", "Discover", "Understand the problem deeply.", "search"], ["02", "Design", "Plan and craft simple solutions.", "design"], ["03", "Develop", "Write clean code and build features.", "code"], ["04", "Deploy", "Test thoroughly and launch.", "rocket"], ["05", "Improve", "Monitor, iterate and improve.", "chart"]] as const;
 
+// Faint, slowly drifting tech marks behind the whole page. Positions are fixed (not random) so server and client render the same markup.
+const floaters: [key: string, left: number, top: number, size: number, seconds: number, delay: number][] = [
+  ["git", 4, 8, 46, 26, 0], ["javascript", 22, 18, 38, 30, -6], ["go", 41, 6, 54, 24, -12], ["aws", 63, 14, 50, 32, -3], ["gcp", 84, 9, 44, 28, -18],
+  ["terraform", 93, 34, 40, 25, -9], ["ansible", 12, 38, 42, 31, -14], ["server", 33, 46, 48, 27, -4], ["postgres", 55, 40, 52, 34, -20], ["mongodb", 75, 52, 40, 29, -7],
+  ["react", 6, 66, 52, 33, -11], ["next", 26, 78, 42, 26, -16], ["android", 47, 70, 46, 30, -2], ["git", 68, 82, 36, 28, -22], ["go", 88, 72, 44, 35, -5],
+  ["javascript", 90, 92, 34, 27, -13], ["aws", 15, 92, 40, 31, -19], ["server", 79, 28, 36, 24, -10], ["react", 52, 90, 34, 29, -8], ["terraform", 36, 26, 32, 33, -24],
+];
+function FloatingIcons() {
+  return <div className="bg-icons" aria-hidden="true">{floaters.map(([key, left, top, size, seconds, delay], i) => (
+    <svg key={i} className={`bg-icon drift-${i % 3}`} viewBox="0 0 24 24" width={size} height={size} style={{ left: `${left}%`, top: `${top}%`, animationDuration: `${seconds}s`, animationDelay: `${delay}s` }}>
+      {key === "server"
+        ? <g fill="none" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round"><rect x="3.5" y="3" width="17" height="7.5" rx="1.6" /><rect x="3.5" y="13.5" width="17" height="7.5" rx="1.6" /><path d="M7.5 6.75h.01M7.5 17.25h.01M11 6.75h5.5M11 17.25h5.5" /></g>
+        : <path fill="currentColor" d={techIcons[key]} />}
+    </svg>
+  ))}</div>;
+}
+
 function HeroPhoto() {
   return <div className="hero-photo"><Image src="/ayub-eleli.jpg" alt="Ayub Eleli" fill priority sizes="(max-width:680px) 86vw, 440px" className="hero-photo-img" /></div>;
 }
@@ -114,6 +132,7 @@ export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const nav = [["home", "Home"], ["about", "About"], ["skills", "Skills"], ["work", "Work"], ["experience", "Experience"], ["contact", "Contact"]];
   return <main className="portfolio-shell">
+    <FloatingIcons />
     <header className="site-header">
       <a className="brand" href="#home" aria-label="Ayub Eleli — home"><Image src="/ayub-avatar.jpg" alt="" width={44} height={44} className="brand-avatar" priority /><span>Ayub<b>.</b></span></a>
       <button className="menu-toggle" onClick={() => setMenuOpen((value) => !value)} aria-expanded={menuOpen} aria-label="Toggle navigation"><span /><span /><span /></button>
@@ -136,7 +155,7 @@ export default function Home() {
       <HeroPhoto />
     </section>
 
-    <section className="about section-wrap section-rule" id="about">
+    <section className="about section-wrap" id="about">
       <div className="about-copy">
         <SectionHeading eyebrow="A little about me" title="About Me" />
         <p className="about-lead">I&apos;m a Nairobi-based software engineer who specialises in <strong>backend development and infrastructure</strong>. I work mostly in Go and JavaScript, and I build cloud-native systems on AWS, DigitalOcean and GCP.</p>
@@ -154,12 +173,12 @@ export default function Home() {
       <div className="about-stats">{stats.map(([value, label]) => <div className="stat" key={label}><b>{value}</b><span>{label}</span></div>)}</div>
     </section>
 
-    <section className="skills section-wrap section-rule" id="skills">
+    <section className="skills section-wrap" id="skills">
       <SectionHeading title="Skills & Technologies" />
       <div className="skill-grid">{skillGroups.map((group) => <div className="skill-card" key={group.title}><div className="skill-head"><span className="skill-icon"><Icon name={group.icon} size={20} /></span><b>{group.title}</b></div><ul>{group.items.map((item) => <li key={item}>{item}</li>)}</ul></div>)}</div>
     </section>
 
-    <section className="work section-wrap section-rule" id="work">
+    <section className="work section-wrap" id="work">
       <div className="section-topline"><SectionHeading title="Selected Work" /><a className="text-link" href={`${GITHUB}?tab=repositories`} target="_blank" rel="noreferrer">All repositories <Icon name="arrow" size={17} /></a></div>
       <div className="project-grid">{projects.map((project) => <article className={`project-card ${project.tone}`} key={project.title}>
         <div className="project-visual"><ProjectGraphic type={project.graphic} /></div>
@@ -178,12 +197,12 @@ export default function Home() {
       <div className="more-grid">{moreProjects.map((p) => <a className="more-item" key={p.repo} href={`${GITHUB}/${p.repo}`} target="_blank" rel="noreferrer"><span className="more-lang">{p.lang}</span><b>{p.title}</b><span>{p.summary}</span></a>)}</div>
     </section>
 
-    <section className="experience section-wrap section-rule" id="experience">
+    <section className="experience section-wrap" id="experience">
       <SectionHeading title="Experience" />
       <div className="experience-grid">{experience.map((item) => <article className="experience-item" key={`${item.company}-${item.role}`}><div className="experience-icon"><Icon name={item.icon} size={23} /></div><div className="experience-copy"><span className="period">{item.period}</span><h3>{item.role}</h3><b>{item.company}</b><p>{item.summary}</p></div></article>)}</div>
     </section>
 
-    <section className="process section-wrap section-rule">
+    <section className="process section-wrap">
       <SectionHeading title="My Process" />
       <div className="process-grid">{process.map(([number, title, copy, icon], index) => <div className="process-item" key={number}><div className="process-icon"><Icon name={icon} size={25} /></div><span className="process-number">{number}</span><h3>{title}</h3><p>{copy}</p>{index < process.length - 1 && <div className="process-dash" />}</div>)}</div>
     </section>
